@@ -7,23 +7,14 @@
     <title>Calories counter APP</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
     <link rel="stylesheet" href="/styles/style.css">
-    <script src="/scripts/script.js" defer></script>
+    <script src="/scripts/script2.js" defer></script>
 </head>
 <body>
     <div class="container">
         <h2>Elements</h2>
+        <button id="sampleDataButton">Generate sample data</button><button id="clearLocalStorage">Remove all</button>
         <div class="elements-row">
             <span id="base">
-            <span class="btn-element old-element">
-                <p class="btn-element-name">Sample 1</p>
-                <p class="btn-element-cal">1000 kcal</p>
-                <p class="btn-element-size">100g</p>
-            </span>
-            <span class="btn-element old-element">
-                <p class="btn-element-name">Sample 2</p>
-                <p class="btn-element-cal">500 kcal</p>
-                <p class="btn-element-size">100g</p>
-            </span>
             </span>
             <span class="btn-element new-element">
                 <p class="btn-element"><p class="add-new"><br>+ <br> ADD NEW ELEMENT</p>
@@ -43,7 +34,7 @@
                     <!-- inner html "aaa<br>" -->
                     <label for="calories">Size:</label><br>
                     <select id="size">
-                        <option value="default">100g</option>
+                        <option value="default">100 g</option>
                         <option value="package">1 package</option>
                     </select><br><br>
                     <button type="button" id="add">Add new item</button>
@@ -53,34 +44,13 @@
     </div>
     <div class="container">
         <h2>Counter</h2>
+        <button id="clearCounter">Remove all</button>
         <div class="calculator">
             <ul class="added_elements">
-                <li>
-                    <span class="counter-name">
-                        NAME
-                    </span>
-                    <span class="counter-cal">
-                        CAL
-                    </span>
-                    <span class="counter-size">
-                        SIZE
-                    </span>
-                </li>
-                <li>
-                    <span class="counter-name">
-                        NAME
-                    </span>
-                    <span class="counter-cal">
-                        CAL
-                    </span>
-                    <span class="counter-size">
-                        SIZE
-                    </span>
-                </li>
             </ul>
         </div>
         <div class="result">
-            SUM: XYZ
+            SUM: 0 kcal
         </div>
     </div>
     
