@@ -1,0 +1,55 @@
+* {
+    font-family: "Nunito";
+}
+
+span.btn-element {
+  display: inline-table;
+  width: 150px;
+  height: 150px;
+  padding: 5px;
+  margin: 20px;  
+  background-color: rgb(247, 247, 247); 
+  border-radius: 25px;
+  box-shadow:  0 0 10px  rgba(0,0,0,0.6);
+  text-align: center;
+  transition: 0.3s
+}
+
+span.btn-element:hover {
+  background-color: cornflowerblue;
+  color: white;
+  cursor: pointer;
+}
+
+p.btn-element-name {
+  font-weight: bold;
+}
+
+li {
+    margin: 30px;
+}
+
+li > span {
+    margin: 10px;
+    padding: 10px;
+    box-shadow:  0 0 1px  rgba(0,0,0,1);
+}
+
+div.form {
+    display: none;
+}
+
+div.form-active {
+    display: block;
+    animation: fade_in_show 0.5s
+}
+
+@keyframes fade_in_show {
+     0% {
+          opacity: 0;
+     }
+
+     100% {
+          opacity: 1;
+     }
+}
