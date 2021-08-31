@@ -7,6 +7,14 @@
         {
             "type": "pwa-chrome",
             "request": "launch",
+            "name": "Mocha debug",
+            "url": "http://127.0.0.1:5501/scripts/test/test.html",
+            "webRoot": "${workspaceFolder}"
+        },
+
+        {
+            "type": "pwa-chrome",
+            "request": "launch",
             "name": "Launch Chrome against localhost",
             "url": "http://127.0.0.1:5501/index.html",
             "webRoot": "${workspaceFolder}"

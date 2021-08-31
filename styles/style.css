@@ -44,6 +44,10 @@ div.form {
 	display: none;
 }
 
+.hidden {
+	display: none;
+}
+
 div.form-active {
 	display: block;
 	animation: fade_in_show 0.5s;

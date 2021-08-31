@@ -1,6 +1,7 @@
 const elementsContainer = document.querySelector('#base');
 const newElement = document.querySelector('.new-element');
 const form = document.querySelector('.form');
+// const addButton = document.querySelector('input#add');
 const addButton = document.querySelector('button#add');
 const sampleDataButton = document.querySelector('button#sampleDataButton');
 const removeAll = document.querySelector('button#clearLocalStorage');
@@ -28,6 +29,12 @@ function getFromLocalStorage(item) {
 
 function setToLocalStorage(string, items) {
 	localStorage.setItem(string, JSON.stringify(items));
+}
+
+function addToLocalStorage(string, newItem) {
+	let localStorage = getFromLocalStorage(string);
+	localStorage.push(newItem);
+	setToLocalStorage(string, localStorage);
 }
 
 const sampleData = [
@@ -72,6 +79,7 @@ function generateHTML() {
 function clearAll() {
 	setToLocalStorage('app', []);
 	removeElements();
+	clearCounterText();
 }
 
 function removeElements() {
@@ -87,43 +95,48 @@ function closeForm() {
 }
 
 function addNewItem() {
-	// create new element
-	const pname = document.querySelector('input#pname');
-	const calories = document.querySelector('input#calories');
-	let size = document.querySelector('select#size');
-	size = size.options[size.selectedIndex].text;
-	size = size.split(' ');
+	// validate
+	if (validate()) {
+		// create new element
+		const pname = document.querySelector('input#pname');
+		const calories = document.querySelector('input#calories');
+		let size = document.querySelector('select#size');
+		size = size.options[size.selectedIndex].text;
+		size = size.split(' ');
 
-	let newItem = {
-		product: pname.value,
-		calories: calories.value,
-		size: size[0],
-		sizeType: size[1]
-	};
-	//add it to localstorage
-	let localStorage = getFromLocalStorage('app');
-	localStorage.push(newItem);
-	setToLocalStorage('app', localStorage);
-	// generate html
-	generateHTML();
-	// close form
-	form.setAttribute('class', 'form');
-	pname.value = '';
-	calories.value = '';
+		let newItem = {
+			product: pname.value,
+			calories: calories.value,
+			size: size[0],
+			sizeType: size[1]
+		};
+		//add it to localstorage
+		addToLocalStorage('app', newItem);
+		// generate html
+		generateHTML();
+		// close form
+		closeForm();
+	}
 }
 
 function addCounterEventForBox(element) {
 	element.addEventListener('click', function(e) {
 		e = e || window.event;
+		console.log(e);
 		const target = e.target.closest('.old-element');
+		console.log(target);
 		const newCounterItem = document.createElement('li');
 		newCounterItem.innerHTML = `<span class="counter-name">${target.querySelector('.btn-element-name')
 			.innerText}</span>
-                    <span class="counter-cal">${target.querySelector('.btn-element-cal').innerText.split(' ')[0]}</span>
+                    <span class="counter-cal">${target
+						.querySelector('.btn-element-cal')
+						.innerText.split(' ')[0]}</span><span class="counter-cal-base hidden">${target
+			.querySelector('.btn-element-cal')
+			.innerText.split(' ')[0]}</span>
                     <input class="counter-size" value=${target
 						.querySelector('.btn-element-size')
 						.innerText.split(' ')[0]} 
-						>${target.querySelector('.btn-element-size').innerText.split(' ')[1]}</span>`;
+						><span class="counter-size-pack">${target.querySelector('.btn-element-size').innerText.split(' ')[1]}</span>`;
 		counterBase.appendChild(newCounterItem);
 		newCounterItem.querySelector('.counter-size').addEventListener('change', changeCalories);
 		sumCalories();
@@ -131,12 +144,14 @@ function addCounterEventForBox(element) {
 }
 
 function changeCalories() {
-	//shieeeeeeeeet
 	let e = window.event;
 	const target = e.target.closest('li');
-	let size = target.querySelector('.counter-size').value;
-	let cal = target.querySelector('.counter-cal').innerText;
-	target.querySelector('.counter-cal').innerText = size * parseInt(cal);
+	const size = target.querySelector('.counter-size').value;
+	const pack = target.querySelector('.counter-size-pack').innerText;
+	const cal = target.querySelector('.counter-cal-base').innerText;
+	if (pack === 'g') size = size / 100;
+	target.querySelector('.counter-cal').innerText = Math.round(size * cal);
+	sumCalories();
 }
 
 function clearCounterText() {
@@ -146,10 +161,21 @@ function clearCounterText() {
 
 function sumCalories() {
 	let sum = 0;
-	for (cal of document.querySelectorAll('.counter-cal')) {
-		sum += parseInt(cal.innerText.split(' ')[0]);
+	for (kcal of document.querySelectorAll('.counter-cal')) {
+		sum += parseInt(kcal.innerText.split(' ')[0]);
 	}
 	counterResult.innerText = `SUM: ${sum} kcal`;
+}
+
+function validate() {
+	const num = document.querySelector('#calories').value;
+	if (isNaN(num)) {
+		document.getElementById('error-calories').innerHTML = 'Enter numeric value only <br>';
+		return false;
+	}
+	else {
+		return true;
+	}
 }
 
 window.onload = function() {
@@ -158,6 +184,7 @@ window.onload = function() {
 };
 
 newElement.addEventListener('click', openForm);
+// addButton.addEventListener('submit', addNewItem);
 addButton.addEventListener('click', addNewItem);
 sampleDataButton.addEventListener('click', generateSample);
 removeAll.addEventListener('click', clearAll);
