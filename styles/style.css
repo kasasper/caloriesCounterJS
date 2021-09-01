@@ -53,6 +53,10 @@ div.form-active {
 	animation: fade_in_show 0.5s;
 }
 
+.error-message {
+	color: red;
+}
+
 @keyframes fade_in_show {
 	0% {
 		opacity: 0;

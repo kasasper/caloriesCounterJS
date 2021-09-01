@@ -12,6 +12,9 @@
 <body>
     <div class="container">
         <h2>Elements</h2>
+        <form id="search-element">
+            <input type="text" id="search-element-input" placeholder="Search element..." onkeypress="return event.keyCode != 13;">
+        </form>
         <button id="sampleDataButton">Generate sample data</button><button id="clearLocalStorage">Remove all</button>
         <div class="elements-row">
             <span id="base">
@@ -37,7 +40,7 @@
                         <option value="default">100 g</option>
                         <option value="package">1 package</option>
                     </select><br><br>
-                    <button id="add">Add</button>
+                    <button type="button" id="add">Add</button>
                     <!-- <input type="submit" id="add"></button> -->
                 </fieldset>
             </form>

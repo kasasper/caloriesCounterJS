@@ -1,7 +1,6 @@
 const elementsContainer = document.querySelector('#base');
 const newElement = document.querySelector('.new-element');
 const form = document.querySelector('.form');
-// const addButton = document.querySelector('input#add');
 const addButton = document.querySelector('button#add');
 const sampleDataButton = document.querySelector('button#sampleDataButton');
 const removeAll = document.querySelector('button#clearLocalStorage');
@@ -10,6 +9,7 @@ const counterBase = document.querySelector('.added_elements');
 const clearCounter = document.querySelector('#clearCounter');
 const counterResult = document.querySelector('.result');
 const counterElementCal = document.querySelector('.counter-size');
+const searchBar = document.querySelector('#search-element-input');
 
 function openForm() {
 	form.setAttribute('class', 'form-active');
@@ -53,10 +53,9 @@ const sampleData = [
 	}
 ];
 
-function generateSample() {
+function generateSample(data) {
 	let localStorage = getFromLocalStorage('app');
-	localStorage.push(sampleData[0]);
-	localStorage.push(sampleData[1]);
+	for (i of data) localStorage.push(i);
 	setToLocalStorage('app', localStorage);
 	generateHTML();
 }
@@ -92,6 +91,10 @@ function closeForm() {
 	calories.value = '';
 	newElement.addEventListener('click', openForm);
 	newElement.classList.remove('active');
+	let errorMessages = document.querySelectorAll('form#myform span[id*="error-"]');
+	for (error of errorMessages) {
+		error.innerHTML = '';
+	}
 }
 
 function addNewItem() {
@@ -101,12 +104,12 @@ function addNewItem() {
 		const pname = document.querySelector('input#pname');
 		const calories = document.querySelector('input#calories');
 		let size = document.querySelector('select#size');
-		size = size.options[size.selectedIndex].text;
+		size = size.options[size.selectedIndex].text.trim();
 		size = size.split(' ');
 
 		let newItem = {
-			product: pname.value,
-			calories: calories.value,
+			product: pname.value.trim(),
+			calories: calories.value.trim(),
 			size: size[0],
 			sizeType: size[1]
 		};
@@ -146,7 +149,8 @@ function addCounterEventForBox(element) {
 function changeCalories() {
 	let e = window.event;
 	const target = e.target.closest('li');
-	const size = target.querySelector('.counter-size').value;
+	let size = target.querySelector('.counter-size').value;
+	if (size < 0 || isNaN(size)) size = 0;
 	const pack = target.querySelector('.counter-size-pack').innerText;
 	const cal = target.querySelector('.counter-cal-base').innerText;
 	if (pack === 'g') size = size / 100;
@@ -168,14 +172,71 @@ function sumCalories() {
 }
 
 function validate() {
-	const num = document.querySelector('#calories').value;
-	if (isNaN(num)) {
-		document.getElementById('error-calories').innerHTML = 'Enter numeric value only <br>';
+	const valpname = isValidName();
+	const valcalories = isValidNumber();
+	return valpname && valcalories ? true : false;
+}
+
+function isValidName() {
+	const pname = document.querySelector('#pname').value;
+	const letters = /^[a-zA-Z ]+$/;
+	if (pname == '') {
+		document.getElementById('error-pname').innerHTML = 'Field cannot be blank <br>';
 		return false;
 	}
 	else {
-		return true;
+		if (searchInElementsBase(pname)) {
+			document.getElementById('error-pname').innerHTML = 'Name have to be unique <br>';
+			return false;
+		}
+		else {
+			if (pname.match(letters)) {
+				document.getElementById('error-pname').innerHTML = '';
+				return true;
+			}
+			else {
+				document.getElementById('error-pname').innerHTML = 'Enter A-z  value only <br>';
+				return false;
+			}
+		}
 	}
+}
+
+function isValidNumber() {
+	const num = document.querySelector('#calories').value;
+	if (num == '') {
+		document.getElementById('error-calories').innerHTML = 'Field cannot be blank <br>';
+		return false;
+	}
+	else {
+		if (isNaN(num)) {
+			document.getElementById('error-calories').innerHTML = 'Enter numeric value only <br>';
+			return false;
+		}
+		else {
+			document.getElementById('error-calories').innerHTML = '';
+			return true;
+		}
+	}
+}
+
+function searchInElementsBase(stringSearch) {
+	let localStorage = getFromLocalStorage('app');
+	for (i of localStorage) {
+		if (stringSearch.trim() == i.product.toLowerCase()) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function searchElement(e) {
+	const term = e.target.value.toLowerCase();
+	const elements = document.querySelectorAll('.old-element');
+	elements.forEach((e) => {
+		const name = e.firstElementChild.textContent;
+		name.toLowerCase().indexOf(term) == -1 ? (e.style.display = 'none') : (e.style.display = 'inline-table');
+	});
 }
 
 window.onload = function() {
@@ -184,8 +245,8 @@ window.onload = function() {
 };
 
 newElement.addEventListener('click', openForm);
-// addButton.addEventListener('submit', addNewItem);
 addButton.addEventListener('click', addNewItem);
-sampleDataButton.addEventListener('click', generateSample);
+sampleDataButton.addEventListener('click', () => generateSample(sampleData));
 removeAll.addEventListener('click', clearAll);
 clearCounter.addEventListener('click', clearCounterText);
+searchBar.addEventListener('keyup', searchElement);
