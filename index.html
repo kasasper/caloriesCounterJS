@@ -7,15 +7,20 @@
     <title>Calories counter APP</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
     <link rel="stylesheet" href="/styles/style.css">
-    <script src="/scripts/script2.js" defer></script>
+    <script type="module" src="/scripts/script2.js" defer></script>
+    <script type="module" src="/utils/sample.js"></script>
 </head>
 <body>
     <div class="container">
+        <div class="header">
         <h2>Elements</h2>
         <form id="search-element">
             <input type="text" id="search-element-input" placeholder="Search element..." onkeypress="return event.keyCode != 13;">
         </form>
-        <button id="sampleDataButton">Generate sample data</button><button id="clearLocalStorage">Remove all</button>
+        <button class="button1"id="sampleDataButton">Generate sample data 1</button>
+        <button class="button1"id="sampleDataButton2">Generate sample data 2</button>
+        <button class="button1"id="clearLocalStorage">Remove all</button>
+        </div>
         <div class="elements-row">
             <span id="base">
             </span>
@@ -30,31 +35,47 @@
                     <label for="pname">Product name:</label><br>
                     <input type="text" id="pname"><br>
                     <span id="error-pname" class="error-message"></span>
-                    <!-- inner html "aaa<br>" -->
                     <label for="calories">Calories:</label><br>
                     <input type="text" id="calories"><br>
                     <span id="error-calories" class="error-message"></span> 
-                    <!-- inner html "aaa<br>" -->
                     <label for="calories">Size:</label><br>
                     <select id="size">
                         <option value="default">100 g</option>
                         <option value="package">1 package</option>
                     </select><br><br>
-                    <button type="button" id="add">Add</button>
-                    <!-- <input type="submit" id="add"></button> -->
+                    <button class="button1"type="button" id="add">Add</button>
                 </fieldset>
             </form>
         </div>
     </div>
     <div class="container">
+        <div class="header">
         <h2>Counter</h2>
-        <button id="clearCounter">Remove all</button>
+        <button class="button1"id="clearCounter">Remove all</button>
+        <button class="button1"id="settingsGoal">Settings</button>
+            <div class="form">
+                <form id="settings">
+                    <fieldset>
+                        <legend>Settings</legend>
+                        <label for="goal">Calories goal</label><br>
+                        <input type="text" id="goal"><br>
+                        <span id="error-goal" class="error-message"></span>
+                        <button class="button1"type="button" id="settingsSave">Save</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
         <div class="calculator">
             <ul class="added_elements">
             </ul>
         </div>
         <div class="result">
             SUM: 0 kcal
+        </div>
+        <div class="yourGoal"> 
+            Your goal: ${userGoal}
+        </div>
+        <div class="goalDifference">
         </div>
     </div>
     

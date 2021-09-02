@@ -1,25 +1,51 @@
+import { sampleData, sampleData2 } from '../utils/sample.js';
+
 const elementsContainer = document.querySelector('#base');
 const newElement = document.querySelector('.new-element');
-const form = document.querySelector('.form');
 const addButton = document.querySelector('button#add');
 const sampleDataButton = document.querySelector('button#sampleDataButton');
+const sampleDataButton2 = document.querySelector('button#sampleDataButton2');
 const removeAll = document.querySelector('button#clearLocalStorage');
-const newCounter = document.querySelectorAll('.old-element');
 const counterBase = document.querySelector('.added_elements');
 const clearCounter = document.querySelector('#clearCounter');
 const counterResult = document.querySelector('.result');
-const counterElementCal = document.querySelector('.counter-size');
 const searchBar = document.querySelector('#search-element-input');
+const settings = document.querySelector('#settingsGoal');
+const settingsGoal = document.querySelector('#goal');
+const settingsSave = document.querySelector('#settingsSave');
+const goalDifferenceTxt = document.querySelector('.goalDifference');
 
-function openForm() {
-	form.setAttribute('class', 'form-active');
-	newElement.removeEventListener('click', openForm);
-	newElement.addEventListener('click', closeForm);
-	newElement.classList.add('active');
+let userGoal = 0;
+let actualSum = 0;
+
+function toggleForm(id = window.event.target.closest('form').id) {
+	const form = document.querySelector(`form#${id}`);
+	if (form.parentElement.className === 'form') {
+		form.parentElement.setAttribute('class', 'form-active');
+		const target = window.event.target;
+		target.classList.add('active');
+	}
+	else {
+		form.parentElement.setAttribute('class', 'form');
+		let inputs = document.querySelectorAll(`form#${id} input`);
+		for (let input of inputs) {
+			input.value = '';
+		}
+		const target = window.event.target;
+		target.classList.remove('active');
+		let errorMessages = document.querySelectorAll(`form#${id} span[id*="error-"]`);
+		for (let error of errorMessages) {
+			error.innerHTML = '';
+		}
+	}
 }
 
 function init() {
 	return getFromLocalStorage('app') || setToLocalStorage('app', []);
+}
+
+function initGoal() {
+	return (userGoal = getFromLocalStorage('goal') || setToLocalStorage('goal', 2000));
 }
 
 function getFromLocalStorage(item) {
@@ -37,25 +63,15 @@ function addToLocalStorage(string, newItem) {
 	setToLocalStorage(string, localStorage);
 }
 
-const sampleData = [
-	{
-		product: 'Sample 1',
-		calories: '1000',
-		size: '100',
-		sizeType: 'g'
-	},
-
-	{
-		product: 'Sample 2',
-		calories: '500',
-		size: '100',
-		sizeType: 'g'
-	}
-];
-
 function generateSample(data) {
-	let localStorage = getFromLocalStorage('app');
-	for (i of data) localStorage.push(i);
+	const localStorage = getFromLocalStorage('app');
+	let res = [];
+	for (let i of data) {
+		for (let l of localStorage) res.push(l.product);
+		res.findIndex((str) => str === i.product) === -1
+			? localStorage.push(i)
+			: console.log(i.product + ' is in base');
+	}
 	setToLocalStorage('app', localStorage);
 	generateHTML();
 }
@@ -85,18 +101,6 @@ function removeElements() {
 	elementsContainer.innerHTML = '';
 }
 
-function closeForm() {
-	form.setAttribute('class', 'form');
-	pname.value = '';
-	calories.value = '';
-	newElement.addEventListener('click', openForm);
-	newElement.classList.remove('active');
-	let errorMessages = document.querySelectorAll('form#myform span[id*="error-"]');
-	for (error of errorMessages) {
-		error.innerHTML = '';
-	}
-}
-
 function addNewItem() {
 	// validate
 	if (validate()) {
@@ -118,7 +122,7 @@ function addNewItem() {
 		// generate html
 		generateHTML();
 		// close form
-		closeForm();
+		toggleForm();
 	}
 }
 
@@ -143,6 +147,18 @@ function addCounterEventForBox(element) {
 		counterBase.appendChild(newCounterItem);
 		newCounterItem.querySelector('.counter-size').addEventListener('change', changeCalories);
 		sumCalories();
+		//it could be in newCounterItem.innerHTML, but I wanted to do it in another way
+		const span = document.createElement('SPAN');
+		const txt = document.createTextNode('\u00D7');
+		span.className = 'close';
+		span.appendChild(txt);
+		span.onclick = function() {
+			const div = this.closest('li');
+			div.innerHTML = '';
+			div.style.display = 'none';
+			sumCalories();
+		};
+		newCounterItem.appendChild(span);
 	});
 }
 
@@ -165,15 +181,17 @@ function clearCounterText() {
 
 function sumCalories() {
 	let sum = 0;
-	for (kcal of document.querySelectorAll('.counter-cal')) {
+	for (let kcal of document.querySelectorAll('.counter-cal')) {
 		sum += parseInt(kcal.innerText.split(' ')[0]);
 	}
 	counterResult.innerText = `SUM: ${sum} kcal`;
+	actualSum = sum;
+	goalDifference();
 }
 
 function validate() {
 	const valpname = isValidName();
-	const valcalories = isValidNumber();
+	const valcalories = isValidNumber('calories');
 	return valpname && valcalories ? true : false;
 }
 
@@ -202,28 +220,28 @@ function isValidName() {
 	}
 }
 
-function isValidNumber() {
-	const num = document.querySelector('#calories').value;
+function isValidNumber(id) {
+	const num = document.querySelector(`#${id}`).value;
 	if (num == '') {
-		document.getElementById('error-calories').innerHTML = 'Field cannot be blank <br>';
+		document.getElementById(`error-${id}`).innerHTML = 'Field cannot be blank <br>';
 		return false;
 	}
 	else {
 		if (isNaN(num)) {
-			document.getElementById('error-calories').innerHTML = 'Enter numeric value only <br>';
+			document.getElementById(`error-${id}`).innerHTML = 'Enter numeric value only <br>';
 			return false;
 		}
 		else {
-			document.getElementById('error-calories').innerHTML = '';
+			document.getElementById(`error-${id}`).innerHTML = '';
 			return true;
 		}
 	}
 }
 
 function searchInElementsBase(stringSearch) {
-	let localStorage = getFromLocalStorage('app');
-	for (i of localStorage) {
-		if (stringSearch.trim() == i.product.toLowerCase()) {
+	let localStorageCheck = getFromLocalStorage('app');
+	for (let l of localStorageCheck) {
+		if (stringSearch.trim() == l.product.toLowerCase()) {
 			return true;
 		}
 	}
@@ -239,14 +257,51 @@ function searchElement(e) {
 	});
 }
 
+function saveGoal() {
+	if (isValidNumber('goal')) {
+		userGoal = settingsGoal.value;
+		setToLocalStorage('goal', userGoal);
+		document.querySelector('.yourGoal').innerText = `Your goal: ${userGoal}`;
+		toggleForm();
+	}
+}
+
+function goalDifference() {
+	const difference = userGoal - actualSum;
+	if (difference > 0) {
+		counterResult.removeAttribute('class', 'error-message');
+		goalDifferenceTxt.removeAttribute('class', 'error-message');
+		goalDifferenceTxt.innerText = `You can eat ${difference} more kcal.`;
+	}
+	else if (difference == 0) {
+		counterResult.removeAttribute('class', 'error-message');
+		goalDifferenceTxt.removeAttribute('class', 'error-message');
+		goalDifferenceTxt.innerText = `Perfect. You have reached your goal.`;
+	}
+	else if (difference < 0) {
+		counterResult.setAttribute('class', 'error-message');
+		goalDifferenceTxt.setAttribute('class', 'error-message');
+		goalDifferenceTxt.innerText = `You have ate ${Math.abs(difference)} kcal too much.`;
+	}
+	else {
+		goalDifferenceTxt.setAttribute('class', 'error-message');
+		goalDifferenceTxt.innerText = `Something were wrong.`;
+	}
+}
+
 window.onload = function() {
 	init();
+	initGoal();
 	generateHTML();
+	document.querySelector('.yourGoal').innerText = `Your goal: ${userGoal}`;
 };
 
-newElement.addEventListener('click', openForm);
+newElement.addEventListener('click', () => toggleForm('myform'));
+settings.addEventListener('click', () => toggleForm('settings'));
 addButton.addEventListener('click', addNewItem);
 sampleDataButton.addEventListener('click', () => generateSample(sampleData));
+sampleDataButton2.addEventListener('click', () => generateSample(sampleData2));
 removeAll.addEventListener('click', clearAll);
 clearCounter.addEventListener('click', clearCounterText);
 searchBar.addEventListener('keyup', searchElement);
+settingsSave.addEventListener('click', saveGoal);
