@@ -7,80 +7,75 @@
     <title>Calories counter APP</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
     <link rel="stylesheet" href="/styles/style.css">
-    <script src="/scripts/script.js" defer></script>
+    <script type="module" src="/scripts/script2.js" defer></script>
+    <script type="module" src="/utils/sample.js"></script>
 </head>
 <body>
     <div class="container">
+        <div class="header">
         <h2>Elements</h2>
+        <form id="search-element">
+            <input type="text" id="search-element-input" placeholder="Search element..." onkeypress="return event.keyCode != 13;">
+        </form>
+        <button class="button1"id="sampleDataButton">Generate sample data 1</button>
+        <button class="button1"id="sampleDataButton2">Generate sample data 2</button>
+        <button class="button1"id="clearLocalStorage">Remove all</button>
+        </div>
         <div class="elements-row">
             <span id="base">
-            <span class="btn-element old-element">
-                <p class="btn-element-name">Sample 1</p>
-                <p class="btn-element-cal">1000 kcal</p>
-                <p class="btn-element-size">100g</p>
-            </span>
-            <span class="btn-element old-element">
-                <p class="btn-element-name">Sample 2</p>
-                <p class="btn-element-cal">500 kcal</p>
-                <p class="btn-element-size">100g</p>
-            </span>
             </span>
             <span class="btn-element new-element">
                 <p class="btn-element"><p class="add-new"><br>+ <br> ADD NEW ELEMENT</p>
             </span>
         </div>
         <div class="form">
-            <form>
+            <form id="myform">
                 <fieldset>
                     <legend>Add new item</legend>
                     <label for="pname">Product name:</label><br>
                     <input type="text" id="pname"><br>
-                    <span class="error-message"></span>
-                    <!-- inner html "aaa<br>" -->
+                    <span id="error-pname" class="error-message"></span>
                     <label for="calories">Calories:</label><br>
                     <input type="text" id="calories"><br>
-                    <span class="error-message"></span> 
-                    <!-- inner html "aaa<br>" -->
+                    <span id="error-calories" class="error-message"></span> 
                     <label for="calories">Size:</label><br>
                     <select id="size">
-                        <option value="default">100g</option>
+                        <option value="default">100 g</option>
                         <option value="package">1 package</option>
                     </select><br><br>
-                    <button type="button" id="add">Add new item</button>
+                    <button class="button1"type="button" id="add">Add</button>
                 </fieldset>
             </form>
         </div>
     </div>
     <div class="container">
+        <div class="header">
         <h2>Counter</h2>
+        <button class="button1"id="clearCounter">Remove all</button>
+        <button class="button1"id="settingsGoal">Settings</button>
+            <div class="form">
+                <form id="settings">
+                    <fieldset>
+                        <legend>Settings</legend>
+                        <label for="goal">Calories goal</label><br>
+                        <input type="text" id="goal"><br>
+                        <span id="error-goal" class="error-message"></span>
+                        <button class="button1"type="button" id="settingsSave">Save</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
         <div class="calculator">
             <ul class="added_elements">
-                <li>
-                    <span class="counter-name">
-                        NAME
-                    </span>
-                    <span class="counter-cal">
-                        CAL
-                    </span>
-                    <span class="counter-size">
-                        SIZE
-                    </span>
-                </li>
-                <li>
-                    <span class="counter-name">
-                        NAME
-                    </span>
-                    <span class="counter-cal">
-                        CAL
-                    </span>
-                    <span class="counter-size">
-                        SIZE
-                    </span>
-                </li>
             </ul>
         </div>
         <div class="result">
-            SUM: XYZ
+            SUM: 0 kcal
+        </div>
+        <div class="yourGoal"> 
+            Your goal: ${userGoal}
+        </div>
+        <div class="goalDifference">
         </div>
     </div>
     

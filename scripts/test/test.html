@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mocha Tests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
+  </head>
+  <body>
+    <div id="mocha"></div>
+
+    <div class="container">
+        <h2>Elements</h2>
+        <button id="sampleDataButton">Generate sample data</button><button id="clearLocalStorage">Remove all</button>
+        <div class="elements-row">
+            <span id="base">
+            </span>
+            <span class="btn-element new-element">
+                <p class="btn-element"><p class="add-new"><br>+ <br> ADD NEW ELEMENT</p>
+            </span>
+        </div>
+        <div class="form">
+            <form>
+                <fieldset>
+                    <legend>Add new item</legend>
+                    <label for="pname">Product name:</label><br>
+                    <input type="text" id="pname"><br>
+                    <span class="error-message"></span>
+                    <!-- inner html "aaa<br>" -->
+                    <label for="calories">Calories:</label><br>
+                    <input type="text" id="calories"><br>
+                    <span class="error-message"></span> 
+                    <!-- inner html "aaa<br>" -->
+                    <label for="calories">Size:</label><br>
+                    <select id="size">
+                        <option value="default">100 g</option>
+                        <option value="package">1 package</option>
+                    </select><br><br>
+                    <button type="button" id="add">Add new item</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Counter</h2>
+        <button id="clearCounter">Remove all</button>
+        <div class="calculator">
+            <ul class="added_elements">
+            </ul>
+        </div>
+        <div class="result">
+            SUM: 0 kcal
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/chai/chai.js"></script>
+    <script src="https://unpkg.com/mocha/mocha.js"></script>
+
+    <script class="mocha-init">
+      mocha.setup('bdd');
+    //   mocha.checkLeaks();
+      const expect = chai.expect;
+    </script>
+    <script src="../script2.js"></script>
+    <script src="script2.test.js"></script>
+    <script class="mocha-exec">
+      mocha.run();
+    </script>
+  </body>
+</html>
