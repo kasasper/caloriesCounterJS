@@ -64,7 +64,7 @@ describe('New element form', () => {
 		expect(calories.value).to.be.equal('');
 	});
 
-	//TDD
+	//TODO
 	it('Calories field have to be a number', () => {
 		expect(false).to.be.true()
 	});
@@ -106,14 +106,14 @@ describe('Counter', () => {
 		expect(counter.length).to.be.equal(0);
 	});
 
-	//TDD
+	//TODO
 	it('Most caloric food should be highlighted', () => {
 		expect(false).to.be.true()
 	});
 
-//TDD
+//TODO
 describe('Calories goal', () => {
-	it('Default there is 200kcal', () => {
+	it('Default there is 2000kcal', () => {
 		expect(false).to.be.true()
 	});
 
@@ -130,7 +130,7 @@ describe('Calories goal', () => {
 	});
 })
 
-//TDD
+//TODO
 describe('Search field', () => {
 	it('Displays result', () => {
 		expect(false).to.be.true()

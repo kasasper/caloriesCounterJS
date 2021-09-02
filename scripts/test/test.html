@@ -10,8 +10,15 @@
     <div id="mocha"></div>
 
     <div class="container">
+        <div class="header">
         <h2>Elements</h2>
-        <button id="sampleDataButton">Generate sample data</button><button id="clearLocalStorage">Remove all</button>
+        <form id="search-element">
+            <input type="text" id="search-element-input" placeholder="Search element..." onkeypress="return event.keyCode != 13;">
+        </form>
+        <button class="button1"id="sampleDataButton">Generate sample data 1</button>
+        <button class="button1"id="sampleDataButton2">Generate sample data 2</button>
+        <button class="button1"id="clearLocalStorage">Remove all</button>
+        </div>
         <div class="elements-row">
             <span id="base">
             </span>
@@ -20,36 +27,53 @@
             </span>
         </div>
         <div class="form">
-            <form>
+            <form id="myform">
                 <fieldset>
                     <legend>Add new item</legend>
                     <label for="pname">Product name:</label><br>
                     <input type="text" id="pname"><br>
-                    <span class="error-message"></span>
-                    <!-- inner html "aaa<br>" -->
+                    <span id="error-pname" class="error-message"></span>
                     <label for="calories">Calories:</label><br>
                     <input type="text" id="calories"><br>
-                    <span class="error-message"></span> 
-                    <!-- inner html "aaa<br>" -->
+                    <span id="error-calories" class="error-message"></span> 
                     <label for="calories">Size:</label><br>
                     <select id="size">
                         <option value="default">100 g</option>
                         <option value="package">1 package</option>
                     </select><br><br>
-                    <button type="button" id="add">Add new item</button>
+                    <button class="button1"type="button" id="add">Add</button>
                 </fieldset>
             </form>
         </div>
     </div>
     <div class="container">
+        <div class="header">
         <h2>Counter</h2>
-        <button id="clearCounter">Remove all</button>
+        <button class="button1"id="clearCounter">Remove all</button>
+        <button class="button1"id="settingsGoal">Settings</button>
+            <div class="form">
+                <form id="settings">
+                    <fieldset>
+                        <legend>Settings</legend>
+                        <label for="goal">Calories goal</label><br>
+                        <input type="text" id="goal"><br>
+                        <span id="error-goal" class="error-message"></span>
+                        <button class="button1"type="button" id="settingsSave">Save</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
         <div class="calculator">
             <ul class="added_elements">
             </ul>
         </div>
         <div class="result">
             SUM: 0 kcal
+        </div>
+        <div class="yourGoal"> 
+            Your goal: ${userGoal}
+        </div>
+        <div class="goalDifference">
         </div>
     </div>
 
@@ -61,7 +85,8 @@
     //   mocha.checkLeaks();
       const expect = chai.expect;
     </script>
-    <script src="../script2.js"></script>
+    <script type="module" src="../script2.js"></script>
+    <script type="module" src="../../utils/sample.js"></script>
     <script src="script2.test.js"></script>
     <script class="mocha-exec">
       mocha.run();
