@@ -41,14 +41,14 @@ describe('New element form', () => {
 	});
 
 	it('Opened form have proper class', () => {
-		openForm();
+		toggleForm();
 		const formParent = document.querySelector('form').parentElement;
 
 		expect(formParent.className).to.be.equal('form-active');
 	});
 
 	it('Closed form have proper class', () => {
-		closeForm();
+		toggleForm();
 		const formParent = document.querySelector('form').parentElement;
 
 		expect(formParent.className).to.be.equal('form');
@@ -59,7 +59,7 @@ describe('New element form', () => {
 		pname.value = 'Banana';
 		const calories = document.querySelector('input#calories');
 		calories.value = '285';
-		closeForm();
+		toggleForm();
 		expect(pname.value).to.be.equal('');
 		expect(calories.value).to.be.equal('');
 	});
