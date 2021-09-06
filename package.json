@@ -3,7 +3,9 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.html",
-	"devDependencies": {},
+	"devDependencies": {
+		"typescript": "^4.4.2"
+	},
 	"scripts": {
 		"test": "mocha"
 	},
