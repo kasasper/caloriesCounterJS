@@ -1,10 +1,26 @@
+const sampleDataTest = [
+	{
+		product: 'Sample 1',
+		calories: '1000',
+		size: '100',
+		sizeType: 'g'
+	},
+
+	{
+		product: 'Sample 2',
+		calories: '500',
+		size: '100',
+		sizeType: 'g'
+	}
+];
+
 describe('Elements', () => {
 	beforeEach(() => {
 		clearAll();
 	});
 
 	it('Generate 2 sample data elements', () => {
-		generateSample();
+		generateSample(sampleDataTest);
 
 		const sampleData = document.querySelectorAll('.old-element');
 
@@ -12,7 +28,7 @@ describe('Elements', () => {
 	});
 
 	it('Remove all button in elements section works', () => {
-		generateSample();
+		generateSample(sampleDataTest);
 		clearAll();
 
 		const sampleData = document.querySelectorAll('.old-element');
@@ -21,14 +37,15 @@ describe('Elements', () => {
 	});
 
 	it('New element displays in elements base', () => {
-		const button = document.querySelector('button#add');
+		newElement.dispatchEvent(new Event('click'));
+		// const button = document.querySelector('button#add');
 		const pname = document.querySelector('input#pname');
 		pname.value = 'Banana';
 		const calories = document.querySelector('input#calories');
 		calories.value = '285';
 		let size = document.querySelector('select#size');
 		size.value = 'package';
-		button.dispatchEvent(new Event('click'));
+		addButton.dispatchEvent(new Event('click'));
 
 		const sampleData = document.querySelectorAll('.old-element');
 		expect(sampleData).to.have.lengthOf(1);
@@ -38,19 +55,16 @@ describe('Elements', () => {
 describe('New element form', () => {
 	beforeEach(() => {
 		clearAll();
+		newElement.dispatchEvent(new Event('click'));
 	});
 
 	it('Opened form have proper class', () => {
-		toggleForm();
-		const formParent = document.querySelector('form').parentElement;
-
+		const formParent = document.querySelector('#myform').parentElement;
 		expect(formParent.className).to.be.equal('form-active');
 	});
 
 	it('Closed form have proper class', () => {
-		toggleForm();
-		const formParent = document.querySelector('form').parentElement;
-
+		const formParent = document.querySelector('#myform').parentElement;
 		expect(formParent.className).to.be.equal('form');
 	});
 
@@ -59,21 +73,27 @@ describe('New element form', () => {
 		pname.value = 'Banana';
 		const calories = document.querySelector('input#calories');
 		calories.value = '285';
-		toggleForm();
+		newElement.dispatchEvent(new Event('click'));
 		expect(pname.value).to.be.equal('');
 		expect(calories.value).to.be.equal('');
 	});
 
-	//TODO
 	it('Calories field have to be a number', () => {
-		expect(false).to.be.true()
+		const calories = document.querySelector('input#calories');
+		calories.value = '285';
+		addButton.dispatchEvent(new Event('click'));
+		let error = document.querySelector('#error-calories');
+		expect(error.textContent).to.be.equal('');
+		calories.value = 'acb';
+		addButton.dispatchEvent(new Event('click'));
+		expect(error.textContent).to.be.equal('Enter numeric value only');
 	});
 });
 
 describe('Counter', () => {
 	beforeEach(() => {
 		clearAll();
-		generateSample();
+		generateSample(sampleData);
 		const elements = document.querySelectorAll('.old-element');
 		elements.forEach((e) => {
 			e.dispatchEvent(new Event('click'));
@@ -106,34 +126,58 @@ describe('Counter', () => {
 		expect(counter.length).to.be.equal(0);
 	});
 
-	//TODO
-	it('Most caloric food should be highlighted', () => {
-		expect(false).to.be.true()
-	});
+	// 	//TODO
+	// 	it('Most caloric food should be highlighted', () => {
+	// 		expect(false).to.be.true();
+	// 	});
+});
 
 //TODO
 describe('Calories goal', () => {
+	beforeEach(() => {
+		window.localStorage.removeItem('goal');
+		initGoal();
+	});
+
 	it('Default there is 2000kcal', () => {
-		expect(false).to.be.true()
+		expect(getFromLocalStorage('goal')).to.not.be.null;
 	});
 
 	it('User can specific daily calories goal', () => {
-		expect(false).to.be.true()
+		settings.dispatchEvent(new Event('click'));
+		const goal = document.querySelector('#goal');
+		goal.value = 2500;
+		settingsSave.dispatchEvent(new Event('click'));
+		expect(document.querySelector('.yourGoal').innerText).to.be.equal('Your goal: 2500 kcal');
 	});
 
-	it('If sum of calories is over daily goal, it\'s highlighted', () => {
-		expect(false).to.be.true()
+	it("If sum of calories is over daily goal, it's highlighted", () => {
+		const newCounterItem = document.createElement('li');
+		newCounterItem.innerHTML = `<span class="counter-name">Test</span>
+                    <span class="counter-cal">3000</span><span class="counter-cal-base hidden">3000</span>
+                    <input class="counter-size" value=100><span class="counter-size-pack">g</span>`;
+		counterBase.appendChild(newCounterItem);
+		sumCalories();
+		expect(counterResult.className).to.be.equal('result error-message');
 	});
 
 	it('There is displayed difference between goal and result', () => {
-		expect(false).to.be.true()
+		clearCounterText();
+		const newCounterItem = document.createElement('li');
+		newCounterItem.innerHTML = `<span class="counter-name">Test 2</span>
+                    <span class="counter-cal">1000</span><span class="counter-cal-base hidden">1000</span>
+                    <input class="counter-size" value=100><span class="counter-size-pack">g</span>`;
+		counterBase.appendChild(newCounterItem);
+		sumCalories();
+		expect(goalDifferenceTxt.innerText).to.be.equal('You can eat 1000 more kcal.');
 	});
-})
+});
 
 //TODO
-describe('Search field', () => {
-	it('Displays result', () => {
-		expect(false).to.be.true()
-	});
-})
-});
+// describe('Search field', () => {
+// 	it('Displays result', () => {
+// 		generateSample(sampleData);
+// 		searchBar.value = '1';
+// 		searchBar.dispatchEvent(new Event('keypress'));
+// 	});
+// });

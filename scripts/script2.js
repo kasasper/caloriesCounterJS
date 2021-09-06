@@ -12,6 +12,7 @@ const settings = document.querySelector('#settingsGoal');
 const settingsGoal = document.querySelector('#goal');
 const settingsSave = document.querySelector('#settingsSave');
 const goalDifferenceTxt = document.querySelector('.goalDifference');
+const yourGoalTxt = document.querySelector('.yourGoal');
 
 let userGoal = 0;
 let actualSum = 0;
@@ -30,7 +31,7 @@ const sampleData = [
 		size: '100',
 		sizeType: 'g'
 	}
-]
+];
 
 const sampleData2 = [
 	{
@@ -116,8 +117,7 @@ const sampleData2 = [
 		size: '100',
 		sizeType: 'g'
 	}
-]
-
+];
 
 function toggleForm(id = window.event.target.closest('form').id) {
 	const form = document.querySelector(`form#${id}`);
@@ -146,7 +146,13 @@ function init() {
 }
 
 function initGoal() {
-	return (userGoal = getFromLocalStorage('goal') || setToLocalStorage('goal', 2000));
+	if (getFromLocalStorage('goal') != null) {
+		return (userGoal = getFromLocalStorage('goal'));
+	}
+	else {
+		setToLocalStorage('goal', 2000);
+		return (userGoal = 2000);
+	}
 }
 
 function getFromLocalStorage(item) {
@@ -300,12 +306,12 @@ function isValidName() {
 	const pname = document.querySelector('#pname').value;
 	const letters = /^[a-zA-Z ]+$/;
 	if (pname == '') {
-		document.getElementById('error-pname').innerHTML = 'Field cannot be blank <br>';
+		document.getElementById('error-pname').innerHTML = 'Field cannot be blank<br>';
 		return false;
 	}
 	else {
 		if (searchInElementsBase(pname)) {
-			document.getElementById('error-pname').innerHTML = 'Name have to be unique <br>';
+			document.getElementById('error-pname').innerHTML = 'Name have to be unique<br>';
 			return false;
 		}
 		else {
@@ -314,7 +320,7 @@ function isValidName() {
 				return true;
 			}
 			else {
-				document.getElementById('error-pname').innerHTML = 'Enter A-z  value only <br>';
+				document.getElementById('error-pname').innerHTML = 'Enter A-z  value only<br>';
 				return false;
 			}
 		}
@@ -324,12 +330,12 @@ function isValidName() {
 function isValidNumber(id) {
 	const num = document.querySelector(`#${id}`).value;
 	if (num == '') {
-		document.getElementById(`error-${id}`).innerHTML = 'Field cannot be blank <br>';
+		document.getElementById(`error-${id}`).innerHTML = 'Field cannot be blank<br>';
 		return false;
 	}
 	else {
 		if (isNaN(num)) {
-			document.getElementById(`error-${id}`).innerHTML = 'Enter numeric value only <br>';
+			document.getElementById(`error-${id}`).innerHTML = 'Enter numeric value only<br>';
 			return false;
 		}
 		else {
@@ -362,7 +368,7 @@ function saveGoal() {
 	if (isValidNumber('goal')) {
 		userGoal = settingsGoal.value;
 		setToLocalStorage('goal', userGoal);
-		document.querySelector('.yourGoal').innerText = `Your goal: ${userGoal}`;
+		yourGoalTxt.innerText = `Your goal: ${userGoal} kcal`;
 		toggleForm();
 	}
 }
@@ -370,22 +376,22 @@ function saveGoal() {
 function goalDifference() {
 	const difference = userGoal - actualSum;
 	if (difference > 0) {
-		counterResult.removeAttribute('class', 'error-message');
-		goalDifferenceTxt.removeAttribute('class', 'error-message');
+		counterResult.classList.remove('error-message');
+		goalDifferenceTxt.classList.remove('error-message');
 		goalDifferenceTxt.innerText = `You can eat ${difference} more kcal.`;
 	}
 	else if (difference == 0) {
-		counterResult.removeAttribute('class', 'error-message');
-		goalDifferenceTxt.removeAttribute('class', 'error-message');
+		counterResult.classList.remove('error-message');
+		goalDifferenceTxt.classList.remove('error-message');
 		goalDifferenceTxt.innerText = `Perfect. You have reached your goal.`;
 	}
 	else if (difference < 0) {
-		counterResult.setAttribute('class', 'error-message');
-		goalDifferenceTxt.setAttribute('class', 'error-message');
+		counterResult.classList.add('error-message');
+		goalDifferenceTxt.classList.add('error-message');
 		goalDifferenceTxt.innerText = `You have ate ${Math.abs(difference)} kcal too much.`;
 	}
 	else {
-		goalDifferenceTxt.setAttribute('class', 'error-message');
+		goalDifferenceTxt.classList.add('error-message');
 		goalDifferenceTxt.innerText = `Something were wrong.`;
 	}
 }
@@ -394,7 +400,7 @@ window.onload = function() {
 	init();
 	initGoal();
 	generateHTML();
-	document.querySelector('.yourGoal').innerText = `Your goal: ${userGoal}`;
+	yourGoalTxt.innerText = `Your goal: ${userGoal} kcal`;
 };
 
 newElement.addEventListener('click', () => toggleForm('myform'));

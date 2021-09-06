@@ -1,0 +1,12 @@
+{
+	"name": "calories-counter-js",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.html",
+	"devDependencies": {},
+	"scripts": {
+		"test": "mocha"
+	},
+	"author": "",
+	"license": "ISC"
+}
