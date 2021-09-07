@@ -266,8 +266,8 @@ function addCounterEventForBox(element) {
 		const txt = document.createTextNode('\u00D7');
 		span.className = 'close';
 		span.appendChild(txt);
-		span.onclick = () => {
-			const div: HTMLInputElement = this.closest('li');
+		span.onclick = function() {
+			const div = (this as HTMLDivElement).closest('li');
 			div.innerHTML = '';
 			div.style.display = 'none';
 			sumCalories();
@@ -377,8 +377,10 @@ function saveGoal(): void {
 	if (isValidNumber('goal')) {
 		let userGoalCheck: string = (settingsGoal as HTMLInputElement).value;
 		setToLocalStorage('goal', userGoalCheck);
+		userGoal = +userGoalCheck;
 		yourGoalTxt.innerText = `Your goal: ${userGoal} kcal`;
 		toggleForm();
+		goalDifference();
 	}
 }
 

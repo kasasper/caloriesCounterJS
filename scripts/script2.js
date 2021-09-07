@@ -232,7 +232,7 @@ function addCounterEventForBox(element) {
         const txt = document.createTextNode('\u00D7');
         span.className = 'close';
         span.appendChild(txt);
-        span.onclick = () => {
+        span.onclick = function () {
             const div = this.closest('li');
             div.innerHTML = '';
             div.style.display = 'none';
@@ -336,8 +336,10 @@ function saveGoal() {
     if (isValidNumber('goal')) {
         let userGoalCheck = settingsGoal.value;
         setToLocalStorage('goal', userGoalCheck);
+        userGoal = +userGoalCheck;
         yourGoalTxt.innerText = `Your goal: ${userGoal} kcal`;
         toggleForm();
+        goalDifference();
     }
 }
 function goalDifference() {
