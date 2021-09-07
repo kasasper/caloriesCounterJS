@@ -86,7 +86,7 @@ describe('New element form', () => {
 		expect(error.textContent).to.be.equal('');
 		calories.value = 'acb';
 		addButton.dispatchEvent(new Event('click'));
-		expect(error.textContent).to.be.equal('Enter numeric value only');
+		expect(error.textContent).to.be.equal('Enter positive numeric value only');
 	});
 });
 

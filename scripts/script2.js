@@ -334,8 +334,8 @@ function isValidNumber(id) {
 		return false;
 	}
 	else {
-		if (isNaN(num)) {
-			document.getElementById(`error-${id}`).innerHTML = 'Enter numeric value only<br>';
+		if (isNaN(num || num <= 0)) {
+			document.getElementById(`error-${id}`).innerHTML = 'Enter positive numeric value only<br>';
 			return false;
 		}
 		else {
@@ -370,6 +370,7 @@ function saveGoal() {
 		setToLocalStorage('goal', userGoal);
 		yourGoalTxt.innerText = `Your goal: ${userGoal} kcal`;
 		toggleForm();
+		goalDifference();
 	}
 }
 
