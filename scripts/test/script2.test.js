@@ -1,39 +1,23 @@
-const sampleDataTest = [
-	{
-		product: 'Sample 1',
-		calories: '1000',
-		size: '100',
-		sizeType: 'g'
-	},
-
-	{
-		product: 'Sample 2',
-		calories: '500',
-		size: '100',
-		sizeType: 'g'
-	}
-];
-
 describe('Elements', () => {
 	beforeEach(() => {
 		clearAll();
 	});
 
 	it('Generate 2 sample data elements', () => {
-		generateSample(sampleDataTest);
+		generateSample(sampleData);
 
-		const sampleData = document.querySelectorAll('.old-element');
+		const sampleDataResult = document.querySelectorAll('.old-element');
 
-		expect(sampleData).to.have.lengthOf(2);
+		expect(sampleDataResult).to.have.lengthOf(2);
 	});
 
 	it('Remove all button in elements section works', () => {
-		generateSample(sampleDataTest);
+		generateSample(sampleData);
 		clearAll();
 
-		const sampleData = document.querySelectorAll('.old-element');
+		const sampleDataResult = document.querySelectorAll('.old-element');
 
-		expect(sampleData).to.have.lengthOf(0);
+		expect(sampleDataResult).to.have.lengthOf(0);
 	});
 
 	it('New element displays in elements base', () => {
@@ -47,8 +31,8 @@ describe('Elements', () => {
 		size.value = 'package';
 		addButton.dispatchEvent(new Event('click'));
 
-		const sampleData = document.querySelectorAll('.old-element');
-		expect(sampleData).to.have.lengthOf(1);
+		const sampleDataResult = document.querySelectorAll('.old-element');
+		expect(sampleDataResult).to.have.lengthOf(1);
 	});
 });
 
