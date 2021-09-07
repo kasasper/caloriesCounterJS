@@ -195,8 +195,8 @@ function addNewItem() {
         let newItem = {
             product: pname.value.trim(),
             calories: calories.value.trim(),
-            size: sizeTxt[0],
-            sizeType: sizeTxt[1]
+            size: sizeArray[0],
+            sizeType: sizeArray[1]
         };
         //add it to localstorage
         addToLocalStorage('app', newItem);

@@ -1,18 +1,18 @@
-const elementsContainer: Element = document.querySelector('#base');
-const newElement: Element = document.querySelector('.new-element');
-const addButton: Element = document.querySelector('button#add');
-const sampleDataButton: Element = document.querySelector('button#sampleDataButton');
-const sampleDataButton2: Element = document.querySelector('button#sampleDataButton2');
-const removeAll: Element = document.querySelector('button#clearLocalStorage');
-const counterBase: Element = document.querySelector('.added_elements');
-const clearCounter: Element = document.querySelector('#clearCounter');
-const counterResult: HTMLInputElement = document.querySelector('.result');
-const searchBar: Element = document.querySelector('#search-element-input');
-const settings: Element = document.querySelector('#settingsGoal');
-const settingsGoal: Element = document.querySelector('#goal');
-const settingsSave: Element = document.querySelector('#settingsSave');
-const goalDifferenceTxt: HTMLInputElement = document.querySelector('.goalDifference');
-const yourGoalTxt: HTMLInputElement = document.querySelector('.yourGoal');
+const elementsContainer: HTMLDivElement = document.querySelector('#base');
+const newElement: HTMLSpanElement = document.querySelector('.new-element');
+const addButton: HTMLButtonElement = document.querySelector('button#add');
+const sampleDataButton: HTMLButtonElement = document.querySelector('button#sampleDataButton');
+const sampleDataButton2: HTMLButtonElement = document.querySelector('button#sampleDataButton2');
+const removeAll: HTMLButtonElement = document.querySelector('button#clearLocalStorage');
+const counterBase: HTMLUListElement = document.querySelector('.added_elements');
+const clearCounter: HTMLButtonElement = document.querySelector('#clearCounter');
+const counterResult: HTMLDivElement = document.querySelector('.result');
+const searchBar: HTMLInputElement = document.querySelector('#search-element-input');
+const settings: HTMLButtonElement = document.querySelector('#settingsGoal');
+const settingsGoal: HTMLInputElement = document.querySelector('#goal');
+const settingsSave: HTMLButtonElement = document.querySelector('#settingsSave');
+const goalDifferenceTxt: HTMLDivElement = document.querySelector('.goalDifference');
+const yourGoalTxt: HTMLDivElement = document.querySelector('.yourGoal');
 
 let userGoal: number = 0;
 let actualSum: number = 0;
@@ -126,11 +126,11 @@ const sampleData2: product[] = [
 	}
 ];
 
-function toggleForm(id = (window.event.target as HTMLInputElement).closest('form').id) {
+function toggleForm(id: string = (window.event.target as HTMLElement).closest('form').id): void {
 	const form = document.querySelector(`form#${id}`);
 	if (form.parentElement.className === 'form') {
 		form.parentElement.setAttribute('class', 'form-active');
-		const target = window.event.target as HTMLInputElement;
+		const target = window.event.target as HTMLElement;
 		target.classList.add('active');
 	}
 	else {
@@ -140,7 +140,7 @@ function toggleForm(id = (window.event.target as HTMLInputElement).closest('form
 			(input as HTMLInputElement).value = '';
 		}
 		const target = window.event.target;
-		(target as HTMLInputElement).classList.remove('active');
+		(target as HTMLElement).classList.remove('active');
 		let errorMessages = document.querySelectorAll(`form#${id} span[id*="error-"]`);
 		for (let error of errorMessages) {
 			error.innerHTML = '';
@@ -148,11 +148,11 @@ function toggleForm(id = (window.event.target as HTMLInputElement).closest('form
 	}
 }
 
-function init() {
+function init(): any {
 	return getFromLocalStorage('app') || setToLocalStorage('app', []);
 }
 
-function initGoal() {
+function initGoal(): any {
 	if (getFromLocalStorage('goal') != null) {
 		return (userGoal = getFromLocalStorage('goal'));
 	}
@@ -162,22 +162,22 @@ function initGoal() {
 	}
 }
 
-function getFromLocalStorage(item: string) {
+function getFromLocalStorage(item: string): any {
 	const localStorageItem = localStorage.getItem(item);
 	return localStorageItem ? JSON.parse(localStorageItem) : null;
 }
 
-function setToLocalStorage(string: string, items: any) {
+function setToLocalStorage(string: string, items: any): void {
 	localStorage.setItem(string, JSON.stringify(items));
 }
 
-function addToLocalStorage(string: string, newItem) {
+function addToLocalStorage(string: string, newItem: any): void {
 	let localStorage = getFromLocalStorage(string);
 	localStorage.push(newItem);
 	setToLocalStorage(string, localStorage);
 }
 
-function generateSample(data) {
+function generateSample(data: product[]): void {
 	const localStorage = getFromLocalStorage('app');
 	let res = [];
 	for (let i of data) {
@@ -190,7 +190,7 @@ function generateSample(data) {
 	generateHTML();
 }
 
-function generateHTML() {
+function generateHTML(): void {
 	const localStorage = getFromLocalStorage('app');
 	removeElements();
 	localStorage.forEach(function(i) {
@@ -205,17 +205,17 @@ function generateHTML() {
 	});
 }
 
-function clearAll() {
+function clearAll(): void {
 	setToLocalStorage('app', []);
 	removeElements();
 	clearCounterText();
 }
 
-function removeElements() {
+function removeElements(): void {
 	elementsContainer.innerHTML = '';
 }
 
-function addNewItem() {
+function addNewItem(): void {
 	// validate
 	if (validate()) {
 		// create new element
@@ -228,8 +228,8 @@ function addNewItem() {
 		let newItem: product = {
 			product: pname.value.trim(),
 			calories: calories.value.trim(),
-			size: sizeTxt[0],
-			sizeType: sizeTxt[1]
+			size: sizeArray[0],
+			sizeType: sizeArray[1]
 		};
 		//add it to localstorage
 		addToLocalStorage('app', newItem);
@@ -276,7 +276,7 @@ function addCounterEventForBox(element) {
 	});
 }
 
-function changeCalories() {
+function changeCalories(): void {
 	let e = window.event;
 	const target = (e.target as HTMLInputElement).closest('li');
 	let size: number = +(target.querySelector('.counter-size') as HTMLInputElement).value;
@@ -288,12 +288,12 @@ function changeCalories() {
 	sumCalories();
 }
 
-function clearCounterText() {
+function clearCounterText(): void {
 	counterBase.innerHTML = '';
 	sumCalories();
 }
 
-function sumCalories() {
+function sumCalories(): void {
 	let sum = 0;
 	for (let kcal of document.querySelectorAll('.counter-cal')) {
 		sum += +(kcal as HTMLInputElement).innerText.split(' ')[0];
@@ -303,13 +303,13 @@ function sumCalories() {
 	goalDifference();
 }
 
-function validate() {
+function validate(): boolean {
 	const valpname = isValidName();
 	const valcalories = isValidNumber('calories');
 	return valpname && valcalories ? true : false;
 }
 
-function isValidName() {
+function isValidName(): boolean {
 	const pname = (document.querySelector('#pname') as HTMLInputElement).value;
 	const letters = /^[a-zA-Z ]+$/;
 	if (pname == '') {
@@ -334,7 +334,7 @@ function isValidName() {
 	}
 }
 
-function isValidNumber(id) {
+function isValidNumber(id: string): boolean {
 	const num: string = (document.querySelector(`#${id}`) as HTMLInputElement).value;
 	if (num == '') {
 		document.getElementById(`error-${id}`).innerHTML = 'Field cannot be blank<br>';
@@ -352,7 +352,7 @@ function isValidNumber(id) {
 	}
 }
 
-function searchInElementsBase(stringSearch) {
+function searchInElementsBase(stringSearch: string): boolean {
 	let localStorageCheck = getFromLocalStorage('app');
 	for (let l of localStorageCheck) {
 		if (stringSearch.trim() == l.product.toLowerCase()) {
@@ -362,7 +362,7 @@ function searchInElementsBase(stringSearch) {
 	return false;
 }
 
-function searchElement(e) {
+function searchElement(e): void {
 	const term = e.target.value.toLowerCase();
 	const elements = document.querySelectorAll('.old-element');
 	elements.forEach((e) => {
@@ -373,7 +373,7 @@ function searchElement(e) {
 	});
 }
 
-function saveGoal() {
+function saveGoal(): void {
 	if (isValidNumber('goal')) {
 		let userGoalCheck: string = (settingsGoal as HTMLInputElement).value;
 		setToLocalStorage('goal', userGoalCheck);
@@ -382,7 +382,7 @@ function saveGoal() {
 	}
 }
 
-function goalDifference() {
+function goalDifference(): void {
 	const difference = userGoal - actualSum;
 	if (difference > 0) {
 		counterResult.classList.remove('error-message');
@@ -405,7 +405,7 @@ function goalDifference() {
 	}
 }
 
-window.onload = function() {
+window.onload = function(): void {
 	init();
 	initGoal();
 	generateHTML();
